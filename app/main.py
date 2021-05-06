@@ -1,24 +1,10 @@
 #!/usr/bin/python
 
 from fastapi import FastAPI
-import requests
-import os
-import json
-import tweepy
 
-#instantiate the twitter api:
-#keys and tokens
-api_key = os.getenv('api_key')
-api_key_secret = os.getenv('api_key_secret')
-token = os.getenv('token')
-token_secret = os.getenv('token_secret')
-
-# Authenticate to Twitter
-auth = tweepy.OAuthHandler(api_key, api_key_secret)
-auth.set_access_token(token, token_secret)
-
-#instance
-api = tweepy.API(auth)
+from twitter import check_mentions
+from twitter import main
+from twitter import get_data
 
 #instantiate fastapi
 app = FastAPI()
@@ -30,15 +16,7 @@ def read_root():
             "Instructions": "...",
             "more": "..."}
 
-
-#post example
-
-#to post a tweet with our account:
-#api.update_status("...")
-
-
-
-
-@app.post("/items/{item_id}")
-def add_item(item_id: int, item: Item):
-    return {"item_id": item_id, "item_name": item.name}
+#run the main function
+@app.get("/airqualitybot/run")
+def start_bot():
+    main()
