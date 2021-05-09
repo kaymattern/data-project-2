@@ -2,9 +2,7 @@
 
 from fastapi import FastAPI
 
-from twitter import check_mentions
-from twitter import main
-from twitter import get_data
+from twitter import bot
 
 #instantiate fastapi
 app = FastAPI()
@@ -13,10 +11,13 @@ app = FastAPI()
 @app.get("/")
 def read_root():
     return {"Hello": "Welcome to our twitter bot",
-            "Instructions": "...",
+            "Instructions": "...", #fill
             "more": "..."}
 
 #run the main function
-@app.get("/airqualitybot/run")
+@app.get("/airqualitybot/startbot")
 def start_bot():
-    main()
+    bot()
+    return {"Success": "The bot is up and running!"}
+
+#create endpoint to stop the bot:

@@ -1,9 +1,9 @@
-#play around with twitter api, then put code in one of the api's (main.py) endpoints (fxn)
+#!/usr/bin/python
 
 import tweepy
 import os
 import requests
-import time
+import json
 
 #keys and tokens
 api_key = 'EipqCuBOepknJZTpvBWIn5o3w' #os.getenv('api_key')
@@ -21,6 +21,7 @@ api = tweepy.API(auth)
 
 
 #AIR QUALITY API
+
 #test data
 city = 'Los Angeles'
 state = 'California'
@@ -31,7 +32,7 @@ output = requests.get(f'http://api.airvisual.com/v2/city?city={city}&state={stat
 
 #API response
 j = output.json()
-print(j)
+#print(j)
 
 #what metrics we'll return to the user:
 # aqius : air quality index for the US
@@ -51,36 +52,51 @@ temp_celsius = j['data']['current']['weather']['tp']
 #then tweet something like: 
 # "The current temperature in {city}, {state} is {tp_faren} degrees Farenheit, and the Air Quality Index is {aqi} which is a {condition} condition."
 
-#air quality function
+#get air quality data function
 def get_data(city, state, country):
     output = requests.get(f'http://api.airvisual.com/v2/city?city={city}&state={state}&country={country}&key={air_key}')
     j = output.json()
     aqi = j['data']['current']['pollution']['aqius']
+    # find condition (if else)
+    # condition = ...
     temp_celsius = j['data']['current']['weather']['tp']
-    print(f"The current temperature in {city}, {state} is {temp_celsius}, and the Air Quality Index is {aqi} which is a ... condition")
+    # convert to farenheit
+    # temp_f
+    reply = f"The current temperature in {city}, {state} is {temp_f}, and the Air Quality Index is {aqi} which is a {condition} condition"
+    return reply
 
+# respond to mentions:
+# figure out an easy way to format the tweets so we can parse the text easily
+# maybe just have them type city: __ , state: __ , country: __ or something
 
-#respond to mentions:
-def check_mentions(api, keywords, since_id):
-    new_since_id = since_id
-    for tweet in tweepy.Cursor(api.mentions_timeline,
-        since_id=since_id).items():
-        new_since_id = max(tweet.id, new_since_id)
-        if tweet.in_reply_to_status_id is not None:
-            continue
-        if any(keyword in tweet.text.lower() for keyword in keywords):
-            api.update_status(
-                status="testing...",
+#create class for the stream
+class MyStreamListener(tweepy.StreamListener):
+
+    def __init__(self, api):
+        self.api = api
+        self.me = api.me()
+
+    def on_status(self, tweet):
+        text = tweet.text
+        # parse text - extract city, state, and country
+
+        # city = ...
+        # state = ...
+        # country = ...
+
+        # then tweet back with the output of the get_data fxn (the reply)
+        api.update_status(
+                status= "test", #get_data(city, state, country),
                 in_reply_to_status_id=tweet.id,
                 auto_populate_reply_metadata=True
             )
-    return new_since_id
 
-def main():
-    since_id = 1
-    while True:
-        since_id = check_mentions(api, ["help", "support"], since_id)
-        time.sleep(10)
+# start the stream
+def bot():
+    tweets_listener = MyStreamListener(api)
+    stream = tweepy.Stream(auth = api.auth, listener = tweets_listener)
+    stream.filter(track=["@AirQualityBot1"]) #track tweets that mention the bot
 
-if __name__ == "__main__":
-    main()
+#call fxn to start the bot
+#bot()
+
