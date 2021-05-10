@@ -65,12 +65,9 @@ class MyStreamListener(tweepy.StreamListener):
                     auto_populate_reply_metadata=True
                 )
         else:
-            # parse text - extract city, state, and country
-
-            # city = ...
-            # state = ...
-            # country = ...
-
+            city = test_text.split('/')[1]
+            state = test_text.split('/')[2]
+            country = test_text.split('/')[3]
             # then tweet back with the output of the get_data fxn (the reply)
             try:
                 api.update_status(
