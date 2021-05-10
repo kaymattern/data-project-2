@@ -19,11 +19,11 @@ auth.set_access_token(token, token_secret)
 #instance
 api = tweepy.API(auth)
 
-# try:
-#     api.verify_credentials()
-#     print("Authentication OK")
-# except:
-#     print("Error during authentication")
+#try:
+#    api.verify_credentials()
+#    print("Authentication OK")
+#except:
+#    print("Error during authentication")
 
 #get air quality data function
 def get_data(city, state, country):
@@ -88,9 +88,11 @@ class MyStreamListener(tweepy.StreamListener):
                         auto_populate_reply_metadata=True
                     )
 
-# start the stream
+    # start the stream
+
 def bot():
     #api.update_status(status='Bot started')
+    global stream
     tweets_listener = MyStreamListener(api)
     stream = tweepy.Stream(api.auth,tweets_listener)
     stream.filter(track=["@AirQualityBot1"]) #track tweets that mention the bot
