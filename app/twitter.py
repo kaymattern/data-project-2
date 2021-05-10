@@ -47,7 +47,6 @@ aqi = j['data']['current']['pollution']['aqius']
 
 # tp : temperature in celcius - convert to farenheit (find equation online)
 temp_celsius = j['data']['current']['weather']['tp']
-#convert to faren
 
 #then tweet something like: 
 # "The current temperature in {city}, {state} is {tp_faren} degrees Farenheit, and the Air Quality Index is {aqi} which is a {condition} condition."
@@ -57,11 +56,20 @@ def get_data(city, state, country):
     output = requests.get(f'http://api.airvisual.com/v2/city?city={city}&state={state}&country={country}&key={air_key}')
     j = output.json()
     aqi = j['data']['current']['pollution']['aqius']
-    # find condition (if else)
-    # condition = ...
+    if aqi > 300:
+        condition = 'hazardous'
+    elif aqi > 200:
+        condition = 'very unhealthy'
+    elif aqi > 150:
+        condition = 'unhealthy'
+    elif aqi > 100:
+        condition = 'unhealthy for sensitive groups'
+    elif aqi > 50:
+        condition = 'moderate'
+    else:
+        condition = 'good'
     temp_celsius = j['data']['current']['weather']['tp']
-    # convert to farenheit
-    # temp_f
+    temp_f = (temp_celcius * 5 / 9) + 32
     reply = f"The current temperature in {city}, {state} is {temp_f}, and the Air Quality Index is {aqi} which is a {condition} condition"
     return reply
 
@@ -96,7 +104,7 @@ class MyStreamListener(tweepy.StreamListener):
             # then tweet back with the output of the get_data fxn (the reply)
             try:
                 api.update_status(
-                        status= "aqi data", #get_data(city, state, country),
+                        status= text, #get_data(city, state, country),
                         in_reply_to_status_id=tweet.id,
                         auto_populate_reply_metadata=True
                     )
