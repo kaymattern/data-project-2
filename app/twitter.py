@@ -6,11 +6,11 @@ import requests
 import json
 
 #keys and tokens
-api_key = 'EipqCuBOepknJZTpvBWIn5o3w' #os.getenv('api_key')
-api_key_secret = '5vxpfKuHjmJE1bl9vPUrmxB6xZhN17V4TDfjcu7jjFtbBeZqyx' #os.getenv('api_key_secret')
-token = '1390393237366509574-fio1YEruOgyYKH9KOwxO7bnCpmX78M' #os.getenv('token')
-token_secret = 'Y5AU5rTL6MobnHnxdv2ubuGQZJISF3as8yqrTJOuAMHaq' #os.getenv('token_secret')
-air_key = '7efc258f-8936-4475-bf29-bc42c287a008' #os.getenv('air_key')
+api_key = os.getenv('api_key')
+api_key_secret = os.getenv('api_key_secret')
+token = os.getenv('token')
+token_secret = os.getenv('token_secret')
+air_key = os.getenv('air_key')
 
 # Authenticate to Twitter
 auth = tweepy.OAuthHandler(api_key, api_key_secret)
@@ -78,18 +78,34 @@ class MyStreamListener(tweepy.StreamListener):
 
     def on_status(self, tweet):
         text = tweet.text
-        # parse text - extract city, state, and country
 
-        # city = ...
-        # state = ...
-        # country = ...
+        #help message
+        if text.lower() == "help":
+            api.update_status(
+                    status= "informative message...",
+                    in_reply_to_status_id=tweet.id,
+                    auto_populate_reply_metadata=True
+                )
+        else:
+            # parse text - extract city, state, and country
 
-        # then tweet back with the output of the get_data fxn (the reply)
-        api.update_status(
-                status= "test", #get_data(city, state, country),
-                in_reply_to_status_id=tweet.id,
-                auto_populate_reply_metadata=True
-            )
+            # city = ...
+            # state = ...
+            # country = ...
+
+            # then tweet back with the output of the get_data fxn (the reply)
+            try:
+                api.update_status(
+                        status= "aqi data", #get_data(city, state, country),
+                        in_reply_to_status_id=tweet.id,
+                        auto_populate_reply_metadata=True
+                    )
+            except:
+                api.update_status(
+                        status= "Sorry, you gave me an invalid request :( Tweet 'help' to learn how to talk to me!",
+                        in_reply_to_status_id=tweet.id,
+                        auto_populate_reply_metadata=True
+                    )
 
 # start the stream
 def bot():

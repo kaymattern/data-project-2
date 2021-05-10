@@ -1,5 +1,3 @@
 tweepy
 requests
-json
-fastapi
-time
+flask

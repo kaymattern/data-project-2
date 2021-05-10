@@ -1,23 +1,25 @@
 #!/usr/bin/python
 
-from fastapi import FastAPI
+import flask
 
 from twitter import bot
 
-#instantiate fastapi
-app = FastAPI()
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
 
 #zone apex
-@app.get("/")
+@app.route('/', methods=['GET'])
 def read_root():
     return {"Hello": "Welcome to our twitter bot",
             "Instructions": "...", #fill
             "more": "..."}
 
-#run the main function
-@app.get("/airqualitybot/startbot")
+@app.route('/airqualitybot/startbot', methods=['GET'])
 def start_bot():
     bot()
     return {"Success": "The bot is up and running!"}
 
-#create endpoint to stop the bot:
+# #create endpoint to stop the bot:
+
+if __name__ == '__main__':
+    app.run('0.0.0.0','8080')
