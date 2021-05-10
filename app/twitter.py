@@ -91,6 +91,9 @@ def bot():
     stream = tweepy.Stream(auth = api.auth, listener = tweets_listener)
     stream.filter(track=["@AirQualityBot1"]) #track tweets that mention the bot
 
+def stop():
+    stream.disconnect()
+
 #call fxn to start the bot
 #bot()
 
