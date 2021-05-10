@@ -12,8 +12,8 @@ app.config["DEBUG"] = True
 @app.route('/', methods=['GET'])
 def read_root():
     return {"Hello": "Welcome to our Twitter bot!",
-            "Instructions": "...", 
-            "more": "..."}
+            "Instructions": "Use the endpoint '/start' to start the bot. Use endpoint 'stop' to stop"
+            }
 
 @app.route('/start', methods=['GET'])
 def start_bot():
