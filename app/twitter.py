@@ -66,7 +66,7 @@ class MyStreamListener(tweepy.StreamListener):
         #help message
         if text == "@AirQualityBot1 help":
             api.update_status(
-                    status= "informative message...",
+                    status= "To receive information about your city of choice, please send me a tweet with the city, state and country in the following format: /City/State/CountryAbbreviation/. Here is an example: /Charlottesville/Virginia/USA/",
                     in_reply_to_status_id=tweet.id,
                     auto_populate_reply_metadata=True
                 )

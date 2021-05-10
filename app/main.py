@@ -11,8 +11,8 @@ app.config["DEBUG"] = True
 #zone apex
 @app.route('/', methods=['GET'])
 def read_root():
-    return {"Hello": "Welcome to our twitter bot",
-            "Instructions": "...", #fill
+    return {"Hello": "Welcome to our Twitter bot!",
+            "Instructions": "...", 
             "more": "..."}
 
 @app.route('/start', methods=['GET'])
