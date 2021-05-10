@@ -14,7 +14,7 @@ def read_root():
             "Instructions": "...", #fill
             "more": "..."}
 
-@app.route('/airqualitybot/startbot', methods=['GET'])
+@app.route('/start', methods=['GET'])
 def start_bot():
     bot()
     return {"Success": "The bot is up and running!"}

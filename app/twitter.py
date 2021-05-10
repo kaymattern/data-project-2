@@ -38,7 +38,7 @@ def get_data(city, state, country):
     else:
         condition = 'good'
     temp_celsius = j['data']['current']['weather']['tp']
-    temp_f = (temp_celcius * 5 / 9) + 32
+    temp_f = round((temp_celsius * 5 / 9) + 32, 0)
     reply = f"The current temperature in {city}, {state} is {temp_f}, and the Air Quality Index is {aqi} which is a {condition} condition"
     return reply
 
@@ -56,22 +56,25 @@ class MyStreamListener(tweepy.StreamListener):
 
     def on_status(self, tweet):
         text = tweet.text
+        try:
+             city = text.split('/')[1]
+             state = text.split('/')[2]
+             country = text.split('/')[3]
+        except:
+            pass
 
         #help message
-        if text.lower() == "help":
+        if text == "@AirQualityBot1 help":
             api.update_status(
                     status= "informative message...",
                     in_reply_to_status_id=tweet.id,
                     auto_populate_reply_metadata=True
                 )
         else:
-            city = test_text.split('/')[1]
-            state = test_text.split('/')[2]
-            country = test_text.split('/')[3]
             # then tweet back with the output of the get_data fxn (the reply)
             try:
                 api.update_status(
-                        status= text, #get_data(city, state, country),
+                        status= get_data(city, state, country),
                         in_reply_to_status_id=tweet.id,
                         auto_populate_reply_metadata=True
                     )
