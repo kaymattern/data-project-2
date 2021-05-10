@@ -20,37 +20,6 @@ auth.set_access_token(token, token_secret)
 api = tweepy.API(auth)
 
 
-#AIR QUALITY API
-
-#test data
-city = 'Los Angeles'
-state = 'California'
-country = 'USA'
-
-#for specified city
-output = requests.get(f'http://api.airvisual.com/v2/city?city={city}&state={state}&country={country}&key={air_key}')
-
-#API response
-j = output.json()
-#print(j)
-
-#what metrics we'll return to the user:
-# aqius : air quality index for the US
-aqi = j['data']['current']['pollution']['aqius']
-# 0-50 : good
-# 51-100 : moderate
-# 101-150 : unhealthy for sensitive groups
-# 151-200 : Unhealthy
-# 201-300 : Very Unhealthy
-# 301+ : Hazardous
-# ^^ return the condition back to user based on what the AQI value is
-
-# tp : temperature in celcius - convert to farenheit (find equation online)
-temp_celsius = j['data']['current']['weather']['tp']
-
-#then tweet something like: 
-# "The current temperature in {city}, {state} is {tp_faren} degrees Farenheit, and the Air Quality Index is {aqi} which is a {condition} condition."
-
 #get air quality data function
 def get_data(city, state, country):
     output = requests.get(f'http://api.airvisual.com/v2/city?city={city}&state={state}&country={country}&key={air_key}')
@@ -72,6 +41,7 @@ def get_data(city, state, country):
     temp_f = (temp_celcius * 5 / 9) + 32
     reply = f"The current temperature in {city}, {state} is {temp_f}, and the Air Quality Index is {aqi} which is a {condition} condition"
     return reply
+
 
 # respond to mentions:
 # figure out an easy way to format the tweets so we can parse the text easily
