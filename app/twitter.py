@@ -25,6 +25,7 @@ api = tweepy.API(auth)
 # except:
 #    print("Error during authentication")
 
+
 #get air quality data function
 def get_data(city, state, country):
     output = requests.get(f'http://api.airvisual.com/v2/city?city={city}&state={state}&country={country}&key={air_key}')
@@ -43,7 +44,7 @@ def get_data(city, state, country):
     else:
         condition = 'good'
     temp_celsius = j['data']['current']['weather']['tp']
-    temp_f = round((temp_celsius * 5 / 9) + 32, 0)
+    temp_f = round((temp_celsius * 9 / 5) + 32, 0)
     reply = f"The current temperature in {city}, {state} is {temp_f}, and the Air Quality Index is {aqi} which is a {condition} condition"
     return reply
 
@@ -52,11 +53,9 @@ def get_data(city, state, country):
 
 #create class for the stream
 class MyStreamListener(tweepy.StreamListener):
-
     # def __init__(self, api):
     #     self.api = api
     #     self.me = api.me()
-
     def on_status(self, tweet):
         text = tweet.text
         try:
@@ -65,7 +64,6 @@ class MyStreamListener(tweepy.StreamListener):
              country = text.split('/')[3]
         except:
             pass
-
         #help message
         if text == "@AirQualityBot1 help":
             api.update_status(
@@ -88,12 +86,11 @@ class MyStreamListener(tweepy.StreamListener):
                         auto_populate_reply_metadata=True
                     )
 
-
 # start the stream
 def bot():
     #api.update_status(status='Bot started')
     global myStream
-    myStreamListener = MyStreamListener()
+    myStreamListener = MyStreamListener(api)
     myStream = tweepy.Stream(auth = api.auth, listener = myStreamListener)
     myStream.filter(track=["@AirQualityBot1"]) #track tweets that mention the bot
 
