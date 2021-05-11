@@ -4,7 +4,7 @@
 Welcome to our Air Quality Twitter bot! 
 
 ## Overview
-The purpose of our project was to build a Twitter bot that would respond to a user's tweet with Air Quality and temperature information for the specified city. We created a Python script that gets data from an API and parses that data to return useful information the the user. The Twitter account handle is @AirQualityBot1.
+The purpose of our project was to build a Twitter bot that would respond to a user's tweet with Air Quality and temperature information for the specified city. We created a Python script that gets data from an API and parses that data to return useful information the the user. The Twitter account handle is @AirQualityBot1
 
 ## Instructions
 1. Send a tweet to our Twitter handle (@AirQualityBot1) specifying a city, state, and country to receive information about. You should include the information in the following format: /City/State/CountryAbbreviation/. Make sure you capitalize the city and state and the entire country abbreviation. Here is an example tweet: "@AirQualityBot1 /Charlottesville/Virginia/USA/"
