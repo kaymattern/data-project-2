@@ -13,3 +13,7 @@ The purpose of our project was to build a Twitter bot that would respond to a us
 
 ## Process
 A simple fastapi application was containerized in order to be deployed to AWS Lightsail as a container service. The fastapi we wrote has an endpoint "/start" that when visited will start up the bot--tweet away. If desired, the bot can be shut down by visiting the "/stop" endpoint.
+
+## Errors
+One error I couldn't explain was the tweepy "stream" unexpectedly stopped working for me. After leaving the code overnight (unchanged), the next day the stream function wouldn't work on my computer (but worked on my partners). No errors were thrown either, it simply...didn't create a stream anymore. All I did to fix the error was open the code in Windows instead of WSL.
+Another error we encountered was with trying to use the Flask API framework. When I used WSL for developement, I could run the app no problem, however, when I switched to Windows to fix the previous issue the app wouldn't run. My partner and I kept getting the same "can't find '__main__' module in..." error and spun our wheels trying to fix it. We switched to the fastapi framework and that works like a charm. 
